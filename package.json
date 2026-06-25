@@ -1,0 +1,47 @@
+{
+  "name": "novixo-react",
+  "version": "0.1.0",
+  "description": "React hooks for the NovixoTech ecosystem — novixo-engine and novixo-ai in one line of code.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "novixo",
+    "offline",
+    "network",
+    "ai",
+    "novixo-engine",
+    "novixo-ai"
+  ],
+  "author": "NovixoTech",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "optionalDependencies": {
+    "novixo-engine": ">=3.0.0",
+    "novixo-ai": ">=0.1.0"
+  }
+}
