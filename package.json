@@ -17,8 +17,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch"
+    "build": "tsup src/index.ts --format esm,cjs --dts --external novixo-engine --external novixo-ai --external @react-native-async-storage/async-storage",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch --external novixo-engine --external novixo-ai --external @react-native-async-storage/async-storage"
   },
   "keywords": [
     "react",
