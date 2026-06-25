@@ -11,47 +11,34 @@ export interface AIOptions {
 }
 
 export interface NovixoAIResult {
-  /** Send a message and get a response */
   chat: (messages: Message[], options?: AIOptions) => Promise<string | null>;
-  /** Shorthand: ask a single question */
   ask: (prompt: string, systemPrompt?: string) => Promise<string | null>;
-  /** The last response text */
   response: string | null;
-  /** Which provider answered last */
   provider: string | null;
-  /** True while waiting for AI response */
   loading: boolean;
-  /** Error message if the request failed */
   error: string | null;
-  /** Clear the last response and error */
   reset: () => void;
+}
+
+export interface NovixoAIConfig {
+  keys: Record<string, string | undefined>;
+  providers?: string[];
+  models?: Record<string, string>;
+  maxTokens?: number;
+  temperature?: number;
+  cache?: boolean;
 }
 
 /**
  * Use novixo-ai in any React component.
- * Handles loading, error, and response state automatically.
  *
  * @example
  * const { ask, response, loading, error } = useNovixoAI({
  *   keys: { groq: import.meta.env.VITE_GROQ_KEY }
  * });
- *
- * const handleSubmit = async () => {
- *   await ask("Explain photosynthesis");
- * };
- *
- * {loading && <Spinner />}
- * {response && <p>{response}</p>}
- * {error && <p className="error">{error}</p>}
+ * await ask("Explain photosynthesis");
  */
-export function useNovixoAI(config: {
-  keys: Partial<Record<string, string>>;
-  providers?: string[];
-  models?: Partial<Record<string, string>>;
-  maxTokens?: number;
-  temperature?: number;
-  cache?: boolean;
-}): NovixoAIResult {
+export function useNovixoAI(config: NovixoAIConfig): NovixoAIResult {
   const [response, setResponse] = useState<string | null>(null);
   const [provider, setProvider] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -66,9 +53,8 @@ export function useNovixoAI(config: {
 
     try {
       const { NovixoAI } = await import("novixo-ai");
-      const ai = new NovixoAI(config as any);
-      const result = await ai.chat(messages, options);
-
+      const ai = new (NovixoAI as any)(config);
+      const result = await (ai as any).chat(messages, options);
       setResponse(result.text);
       setProvider(result.provider);
       return result.text;
@@ -79,7 +65,7 @@ export function useNovixoAI(config: {
     } finally {
       setLoading(false);
     }
-  }, [config]);
+  }, [JSON.stringify(config)]);
 
   const ask = useCallback(async (
     prompt: string,
@@ -98,4 +84,4 @@ export function useNovixoAI(config: {
   }, []);
 
   return { chat, ask, response, provider, loading, error, reset };
-}
+      }
